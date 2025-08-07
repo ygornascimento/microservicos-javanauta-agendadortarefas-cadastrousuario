@@ -90,8 +90,8 @@ public class UsuarioService {
         Usuario usuarioEntity = usuarioRepository.findByEmail(email).orElseThrow( () ->
                 new ResourceNotFoundException("Email não localizado."));
 
-        Usuario usuario = usuarioConverter.updateUsuario(usuarioDTO, usuarioEntity);
+        Usuario usuarioAtualizado = usuarioConverter.updateUsuario(usuarioDTO, usuarioEntity);
 
-        return usuarioConverter.converteParaUsuarioDTO(usuarioRepository.save(usuario));
+        return usuarioConverter.converteParaUsuarioDTO(usuarioRepository.save(usuarioAtualizado));
     }
 }
