@@ -1,5 +1,7 @@
 package br.tec.itlabs.agendadorcadastrousuario.controller;
 
+import br.tec.itlabs.agendadorcadastrousuario.business.dto.EnderecoDTO;
+import br.tec.itlabs.agendadorcadastrousuario.business.dto.TelefoneDTO;
 import br.tec.itlabs.agendadorcadastrousuario.business.dto.UsuarioDTO;
 import br.tec.itlabs.agendadorcadastrousuario.business.service.UsuarioService;
 import br.tec.itlabs.agendadorcadastrousuario.infrastructure.security.JwtUtil;
@@ -42,5 +44,15 @@ public class UsuarioController {
     public ResponseEntity<UsuarioDTO> atualizaDadosUsuario(@RequestBody UsuarioDTO usuarioDTO,
                                                            @RequestHeader("Authorization") String token) {
         return ResponseEntity.ok(usuarioService.atualizaDadosUsuario(token, usuarioDTO));
+    }
+
+    @PutMapping("/endereco")
+    public ResponseEntity<EnderecoDTO> atualizaEndereco(@RequestBody EnderecoDTO enderecoDTO, @RequestParam Long id) {
+        return ResponseEntity.ok(usuarioService.atualizaEndereco(id, enderecoDTO));
+    }
+
+    @PutMapping("/telefone")
+    public ResponseEntity<TelefoneDTO> atualizaTelefone(@RequestBody TelefoneDTO telefoneDTO, @RequestParam Long id) {
+        return ResponseEntity.ok(usuarioService.atualizaTelefone(id, telefoneDTO));
     }
 }

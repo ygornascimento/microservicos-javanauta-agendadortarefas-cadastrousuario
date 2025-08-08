@@ -1,11 +1,17 @@
 package br.tec.itlabs.agendadorcadastrousuario.business.service;
 
 import br.tec.itlabs.agendadorcadastrousuario.business.converter.UsuarioConverter;
+import br.tec.itlabs.agendadorcadastrousuario.business.dto.EnderecoDTO;
+import br.tec.itlabs.agendadorcadastrousuario.business.dto.TelefoneDTO;
 import br.tec.itlabs.agendadorcadastrousuario.business.dto.UsuarioDTO;
+import br.tec.itlabs.agendadorcadastrousuario.infrastructure.entity.Endereco;
+import br.tec.itlabs.agendadorcadastrousuario.infrastructure.entity.Telefone;
 import br.tec.itlabs.agendadorcadastrousuario.infrastructure.entity.Usuario;
 import br.tec.itlabs.agendadorcadastrousuario.infrastructure.exceptions.ConflictException;
 import br.tec.itlabs.agendadorcadastrousuario.infrastructure.exceptions.ResourceNotFoundException;
 import br.tec.itlabs.agendadorcadastrousuario.infrastructure.exceptions.UnauthorizedException;
+import br.tec.itlabs.agendadorcadastrousuario.infrastructure.repository.EnderecoRepository;
+import br.tec.itlabs.agendadorcadastrousuario.infrastructure.repository.TelefoneRepository;
 import br.tec.itlabs.agendadorcadastrousuario.infrastructure.repository.UsuarioRepository;
 import br.tec.itlabs.agendadorcadastrousuario.infrastructure.security.JwtUtil;
 import lombok.AllArgsConstructor;
@@ -23,6 +29,8 @@ import org.springframework.stereotype.Service;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final EnderecoRepository enderecoRepository;
+    private final TelefoneRepository telefoneRepository;
     private final UsuarioConverter usuarioConverter;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
@@ -94,4 +102,24 @@ public class UsuarioService {
 
         return usuarioConverter.converteParaUsuarioDTO(usuarioRepository.save(usuarioAtualizado));
     }
+
+    public EnderecoDTO atualizaEndereco(Long idEndereco, EnderecoDTO enderecoDTO) {
+        Endereco enderecoEntity = enderecoRepository.findById(idEndereco).orElseThrow(() ->
+                new ResourceNotFoundException("Id Endereco não encontrado" + idEndereco));
+
+        Endereco endereco = usuarioConverter.updateEndereco(enderecoDTO, enderecoEntity);
+
+        return usuarioConverter.converteEnderecoParaEnderecoDTO(enderecoRepository.save(endereco));
+
+    }
+
+    public TelefoneDTO atualizaTelefone(Long idTelefone, TelefoneDTO telefoneDTO) {
+        Telefone telefoneEntity = telefoneRepository.findById(idTelefone).orElseThrow(() ->
+                new ResourceNotFoundException("Id Telefone não encontrado" + idTelefone));
+
+        Telefone telefone = usuarioConverter.updateTelefone(telefoneDTO, telefoneEntity);
+
+        return usuarioConverter.converteTelefoneParaTelefoneDTO(telefoneRepository.save(telefone));
+    }
+
 }
